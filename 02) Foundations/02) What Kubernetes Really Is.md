@@ -138,11 +138,6 @@ This is a common confusion.
 * Monitor running containers
 * Restart them if needed
 
-Think of it like:
-
-* Docker = Engine
-* Kubernetes = Traffic Controller
-
 ---
 
 ## 7️⃣ Kubernetes Is a Control System
@@ -215,12 +210,14 @@ Without you touching anything.
 ## ⚠️ Common Beginner Mistakes
 
 * ❌ Thinking Kubernetes runs containers itself
+    * ✅ A container runtime is responsible for running containers.
 * ❌ Trying to control every step manually
+    * ✅ Kubernetes will control the system, you just manage the application behavior
 * ❌ Treating Kubernetes like a scripting tool
 
 ---
 
-## ✅ Key Takeaway from Chapter 2
+## ✅ Key Takeaways
 
 * Kubernetes works on **desired state**
 * It uses **declarative configuration**

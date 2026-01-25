@@ -36,7 +36,7 @@ At a small scale, these operational problems/challenges were manageable, but **a
 
 ---
 
-## 1️⃣ The First Big Problem Solved by Docker: “It Works on My Machine”
+## 📦 The First Big Problem Solved by Docker: “It Works on My Machine”
 
 You might have heard developers say:
 
@@ -96,9 +96,9 @@ As container adoption grew, Kubernetes became the **de facto standard for contai
 
 ## Now let's understand the operational problems one-by-one:
 
-## 2️⃣ Clustering
+### 1️⃣ Clustering
 
-### What is Clustering?
+What is Clustering?
 
 > **Clustering** means running and managing containers across **multiple machines (hosts)** as a single system.
 * Prevents **single points of failure**: if one host goes down, containers can run on other nodes
@@ -136,7 +136,7 @@ Clustering removes the **single point of failure**.
 
 ---
 
-## 3️⃣ Auto-Healing
+### 2️⃣ Auto-Healing
 
 **Auto-healing** ensures that if a container fails, it is **automatically restarted** without human intervention.
 
@@ -171,7 +171,7 @@ At scale, this approach is **not sustainable**.
 
 ---
 
-## 4️⃣ Auto-Scaling: Running Containers at Scale
+### 3️⃣ Auto-Scaling: Running Containers at Scale
 
 **Auto-scaling** allows the system to **adjust the number of running containers** based on traffic or resource usage.
 
@@ -203,7 +203,7 @@ Imagine:
 
 ---
 
-## 5️⃣ Rolling Updates & Deployments
+## 4️⃣ Rolling Updates & Deployments
 
 Rolling updates and deployments allow applications to be updated **without downtime** by gradually replacing old container versions with new ones.
 
@@ -223,7 +223,7 @@ Rolling updates and deployments allow applications to be updated **without downt
 
 ---
 
-## 6️⃣ Service Discovery & Networking
+## 5️⃣ Service Discovery & Networking
 
 Service discovery and networking ensure that containers can **reliably find and communicate** with each other in dynamic environments.
 
