@@ -21,10 +21,6 @@ The **Container Runtime Interface (CRI)** is a specific API used only by **Kuber
 
 ---
 
-Here’s a clean, well-organized, and clear version of your content on **Open Container Initiative (OCI)** with slight improvements for flow and formatting:
-
----
-
 ### **Open Container Initiative (OCI)**
 
 The **OCI** is a set of open standards designed to ensure that any container you build can run on any platform. It is **not specific to Kubernetes**; rather, it forms the foundation for all modern container tools like **Docker**, **Podman**, and others.

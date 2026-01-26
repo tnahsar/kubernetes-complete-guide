@@ -1,6 +1,3 @@
-Great 👍
-Now we officially **enter Kubernetes architecture**.
-Take this chapter slowly — everything builds on this.
 
 ---
 

@@ -203,7 +203,7 @@ Imagine:
 
 ---
 
-## 4️⃣ Rolling Updates & Deployments
+### 4️⃣ Rolling Updates & Deployments
 
 Rolling updates and deployments allow applications to be updated **without downtime** by gradually replacing old container versions with new ones.
 
@@ -223,7 +223,7 @@ Rolling updates and deployments allow applications to be updated **without downt
 
 ---
 
-## 5️⃣ Service Discovery & Networking
+### 5️⃣ Service Discovery & Networking
 
 Service discovery and networking ensure that containers can **reliably find and communicate** with each other in dynamic environments.
 
@@ -265,9 +265,7 @@ Without traffic police:
 
 ---
 
-## Summary
-
-### Why Kubernetes Was Created
+### 🧾 Why Kubernetes Was Created
 
 Kubernetes was created to:
 
@@ -281,15 +279,15 @@ All of this happens with **minimal human intervention**.
 
 👉 Kubernetes turns **manual operations into automated systems**.
 
+---
 
-### What Kubernetes Solves (At a Glance)
+### 📌 What Kubernetes Solves (At a Glance)
 
 * ❌ Manual scaling → ✅ Auto-scaling
 * ❌ Manual restarts → ✅ Self-healing
 * ❌ Server dependency → ✅ Cluster abstraction
 * ❌ Downtime deployments → ✅ Rolling updates
 * ❌ Inconsistent environments → ✅ Declarative configuration
-
 
 ### 🔑 One-Line Definition (Interview-Ready)
 
@@ -306,7 +304,7 @@ All of this happens with **minimal human intervention**.
 
 ---
 
-## ✅ Key Takeaways
+### ✅ Key Takeaways
 
 * Docker solved **application packaging**
 * Docker Swarm addressed **basic orchestration**

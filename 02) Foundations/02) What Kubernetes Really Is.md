@@ -5,7 +5,7 @@
 
 ---
 
-## 1️⃣ Why This Chapter Is Important
+### 1️⃣ Why This Chapter Is Important
 
 Most people **use Kubernetes without understanding it**.
 
@@ -21,7 +21,7 @@ This chapter builds the **mental model** so Kubernetes **makes sense**, not feel
 
 ---
 
-## 2️⃣ Simple Definition
+### 2️⃣ Simple Definition
 
 > **Kubernetes is a system that runs your application exactly the way you describe, and keeps it running that way.**
 
@@ -31,7 +31,7 @@ You **describe what you want**, Kubernetes **makes it happen** and **keeps it th
 
 ---
 
-## 3️⃣ The Core Idea: Desired State vs Current State
+### 3️⃣ The Core Idea: Desired State vs Current State
 
 This is the **heart of Kubernetes**.
 
@@ -93,7 +93,7 @@ You only care about the **result**.
 
 ---
 
-## 5️⃣ Declarative vs Imperative (Very Important)
+### 5️⃣ Declarative vs Imperative (Very Important)
 
 ### Imperative (Old Way)
 
@@ -123,7 +123,7 @@ Kubernetes figures out:
 
 ---
 
-## 6️⃣ Kubernetes Is NOT a Container Runtime
+### 6️⃣ Kubernetes Is NOT a Container Runtime
 
 This is a common confusion.
 
@@ -140,7 +140,7 @@ This is a common confusion.
 
 ---
 
-## 7️⃣ Kubernetes Is a Control System
+### 7️⃣ Kubernetes Is a Control System
 
 At its core, Kubernetes is a **control loop system**.
 
@@ -158,7 +158,7 @@ This is why Kubernetes is:
 
 ---
 
-## 8️⃣ Why This Design Is Powerful
+### 8️⃣ Why This Design Is Powerful
 
 Because of this model:
 
@@ -177,7 +177,7 @@ You start managing:
 
 ---
 
-## 9️⃣ Real-World Example
+### 9️⃣ Real-World Example
 
 You define:
 
@@ -201,13 +201,13 @@ Without you touching anything.
 
 ---
 
-## 🔑 One-Line Interview Answer
+### 🔑 One-Line Interview Answer
 
 > **Kubernetes is a declarative system that continuously ensures the desired state of applications in a cluster.**
 
 ---
 
-## ⚠️ Common Beginner Mistakes
+### ⚠️ Common Beginner Mistakes
 
 * ❌ Thinking Kubernetes runs containers itself
     * ✅ A container runtime is responsible for running containers.
@@ -217,7 +217,7 @@ Without you touching anything.
 
 ---
 
-## ✅ Key Takeaways
+### ✅ Key Takeaways
 
 * Kubernetes works on **desired state**
 * It uses **declarative configuration**
