@@ -38,7 +38,8 @@ Pod dies → new Pod A → IP 10.244.0.8
 
 ## 3️⃣ Service Abstraction
 
-* A **Service provides a stable abstraction** over Pods
+* A **Service provides a stable abstraction** over Pods, 
+  * Abstraction layer or abstraction level that is a way of hiding the working details of a subsystem.
 * Clients connect to the **Service**, not individual Pods
 * Kubernetes routes requests to **any matching Pod** automatically
 

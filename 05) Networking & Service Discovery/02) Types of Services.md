@@ -42,8 +42,8 @@ spec:
     app: backend
   ports:
     - protocol: TCP
-      port: 80
-      targetPort: 8080
+      port: 80  # Service listens here
+      targetPort: 8080 # Pod listens here
   type: ClusterIP
 ```
 
