@@ -350,6 +350,7 @@ Next:
 
 # 📘 Chapter 35: What Helm Really Is (Mental Model)
 
+
 (We’ll break down Chart, Release, Repository clearly.)
 
 Ready to continue?
