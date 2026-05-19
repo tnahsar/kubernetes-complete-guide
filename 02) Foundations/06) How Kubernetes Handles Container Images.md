@@ -29,8 +29,8 @@ Kubernetes **does not** create or build container images. It’s designed to **p
 
 3. **Kubernetes runs the container.**
 
-   * After pulling the image, Kubernetes delegates the task of running the container to the container runtime (like **containerd** or **CRI-O**).
-   * The container runtime takes care of pulling the image, extracting it, and then running the application inside the container.
+   * After pulling the image, Kubernetes delegates the task of running the container to the high-level container runtime (like **containerd** or **CRI-O**).
+   * The high-level container runtime (like **containerd** or **CRI-O**) takes care of pulling the image, extracting it, and then running the application on low-level container runtime (like **runc**).
 
 ---
 
@@ -79,10 +79,5 @@ Kubernetes **does not** create or build container images. It’s designed to **p
 
 * **Kubernetes**: Pulls pre-built container images from a registry and **runs** them as containers.
 * **Docker / Build Tools**: Build the container images.
-
-### **Real-World Analogy**:
-
-* **Kubernetes** is like a **chef** who prepares meals for customers. The chef **doesn't cook the food** but takes pre-made recipes and **serves them to the customers**.
-* **Docker** is like the **restaurant** that **prepares the ingredients** (builds the meal) and **puts them in a package** (the image) for the chef to serve.
 
 ---

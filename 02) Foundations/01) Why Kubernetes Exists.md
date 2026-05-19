@@ -243,27 +243,6 @@ Service discovery and networking ensure that containers can **reliably find and 
 **Key takeaway:** Docker Swarm provides simple service discovery and networking, while Kubernetes offers a robust, extensible networking model designed for complex and large-scale applications.
 
 ---
-## Mental Model (Kubernetes): The Traffic Police Example 🚦
-
-Imagine a city with:
-
-* Many roads (servers)
-* Many cars (containers)
-
-Without traffic police:
-
-* Accidents occur
-* Traffic jams form
-* No coordination
-
-**Kubernetes acts like traffic police:**
-
-* Decides where containers run
-* Redirects traffic
-* Restarts failed containers
-* Keeps the system stable and flowing
-
----
 
 ### 🧾 Why Kubernetes Was Created
 

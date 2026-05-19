@@ -63,37 +63,7 @@ Desired State ≠ Current State
 
 ---
 
-## 4️⃣ Mental Model: Restaurant Manager 🍽️
-
-Imagine a restaurant.
-
-### You (Customer)
-
-You say:
-
-> “I want 3 pizzas on the table.”
-
-### Restaurant Manager (Kubernetes)
-
-* Checks kitchen status
-* Assigns chefs
-* Replaces a chef if someone quits
-* Ensures 3 pizzas are always served
-
-### Important:
-
-You **don’t care**:
-
-* Which chef cooks
-* Which oven is used
-
-You only care about the **result**.
-
-👉 Kubernetes works the same way.
-
----
-
-### 5️⃣ Declarative vs Imperative (Very Important)
+### 4️⃣ Declarative vs Imperative (Very Important)
 
 ### Imperative (Old Way)
 
@@ -123,7 +93,7 @@ Kubernetes figures out:
 
 ---
 
-### 6️⃣ Kubernetes Is NOT a Container Runtime
+### 5️⃣ Kubernetes Is NOT a Container Runtime
 
 This is a common confusion.
 
@@ -140,7 +110,7 @@ This is a common confusion.
 
 ---
 
-### 7️⃣ Kubernetes Is a Control System
+### 6️⃣ Kubernetes Is a Control System
 
 At its core, Kubernetes is a **control loop system**.
 
@@ -158,7 +128,7 @@ This is why Kubernetes is:
 
 ---
 
-### 8️⃣ Why This Design Is Powerful
+### 7️⃣ Why This Design Is Powerful
 
 Because of this model:
 
@@ -177,7 +147,7 @@ You start managing:
 
 ---
 
-### 9️⃣ Real-World Example
+### 8️⃣ Real-World Example
 
 You define:
 

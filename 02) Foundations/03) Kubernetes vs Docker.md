@@ -135,10 +135,15 @@ Kubernetes works **on top of a container runtime**.
 ### In Real Life:
 
 1️⃣ Developer uses **Docker** to build image
+
 2️⃣ Image is pushed to a registry
+
 3️⃣ Kubernetes pulls the image
+
 4️⃣ Kubernetes runs it using **containerd**
+
 5️⃣ Kubernetes manages scaling & failures
+
 
 Docker and Kubernetes **never compete**.
 
