@@ -22,8 +22,8 @@ Choosing the **right Service type** is essential for **reliable networking**.
 ### What It Is
 
 * Default Service type
-* Exposes Service **only inside the cluster**
-* Pods and other Services can access it
+* Exposes Service object **only inside the cluster**
+* Pods and other Services can access it.
 
 ### Use Case
 
@@ -35,20 +35,71 @@ Choosing the **right Service type** is essential for **reliable networking**.
 ```yaml
 apiVersion: v1
 kind: Service
+
 metadata:
   name: backend-service
+
 spec:
   selector:
     app: backend
+
   ports:
     - protocol: TCP
-      port: 80  # Service listens here
-      targetPort: 8080 # Pod listens here
+      port: 80
+      targetPort: 8080
+
   type: ClusterIP
 ```
 
-* `port` → Port exposed to cluster
-* `targetPort` → Port in Pod
+* `port` → This is the port exposed by the Service. Means service/clients communicate with the Service on port 80.
+  * Example: http://backend-service:80
+* `targetPort` → targetPort is a port in the Pod’s network namespace, usually opened by an application process running inside a container.
+
+Example: Node.js application
+```javascript
+app.listen(8080)
+```
+
+ Service forwards traffic to Pods on port 8080
+
+## Communication flow
+
+```text
+Frontend Pod
+    ↓
+backend-service:80
+        ↓
+Pod IP:8080
+        ↓
+Node.js container listening on 8080
+```
+
+### When pod is having two container
+
+> All containers in a pod share the same network namespace. So, all containers share the same **pod IP and port space**
+
+Two containers inside same Pod CANNOT both listen on same port.
+
+Suppose pod contains:
+```text
+Pod
+ ├── nginx container
+ └── log-agent container
+```
+
+So, both can't listen 8080 port.
+
+### Why ClusterIP service object is needed
+
+Pods are ephemeral.
+
+When Pods:
+* crash
+* restart
+* get recreated
+their IP addresses can change.
+
+Applications communicating directly using Pod IPs will fail. ClusterIP service solves this problem by providing a stable network endpoint.
 
 ---
 
