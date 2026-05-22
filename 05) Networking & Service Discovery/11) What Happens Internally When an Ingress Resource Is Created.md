@@ -219,7 +219,7 @@ through:
 
 ---
 
-# 5️⃣ Ingress Controller Configures Internal Routing
+## 5️⃣ Ingress Controller Configures Internal Routing
 
 Ingress Controller creates internal routing rules.
 
@@ -239,11 +239,11 @@ backend-service  → backend Pods
 
 ---
 
-# 🌐 Important Understanding
+## 🌐 Important Understanding
 
 Ingress usually routes traffic to:
 
-```text id="a5m’wini"
+```text
 ClusterIP Services
 ```
 
@@ -260,19 +260,19 @@ Ingress Controller itself usually runs as:
 
 and commonly exposes itself using:
 
-```text id="y2m’wini"
+```text
 LoadBalancer Service
 ```
 
 or sometimes:
 
-```text id="d8m’wini"
+```text
 NodePort Service
 ```
 
 Example:
 
-```text id="v9m’wini"
+```text
 Internet
     ↓
 Cloud Load Balancer
@@ -282,17 +282,17 @@ Ingress Controller Pods
 
 ---
 
-# 7️⃣ Cloud Load Balancer Gets Created
+## 7️⃣ Cloud Load Balancer Gets Created
 
 If Ingress Controller uses:
 
-```yaml id="jlwm"
+```yaml
 type: LoadBalancer
 ```
 
 then:
 
-```text id="h6m’wini"
+```text
 Cloud Controller Manager
 ```
 
@@ -304,17 +304,17 @@ requests cloud provider infrastructure to create:
 
 Examples:
 
-* Amazon Web Services [AWS](https://aws.amazon.com?utm_source=chatgpt.com)
-* Google Cloud [Google Cloud](https://cloud.google.com?utm_source=chatgpt.com)
-* Microsoft [Microsoft Azure](https://azure.microsoft.com?utm_source=chatgpt.com)
+* AWS ELB / NLB
+* Azure Load Balancer
+* GCP Load Balancer
 
 ---
 
-# 8️⃣ External Traffic Reaches Ingress Controller
+## 8️⃣ External Traffic Reaches Ingress Controller
 
 Example flow:
 
-```text id="g3m’wini"
+```text
 User Browser
       ↓
 https://myapp.com
@@ -326,7 +326,7 @@ Ingress Controller
 
 ---
 
-# 9️⃣ Ingress Controller Performs Smart Routing
+## 9️⃣ Ingress Controller Performs Smart Routing
 
 Ingress Controller checks:
 
@@ -336,7 +336,7 @@ Ingress Controller checks:
 
 Example:
 
-```text id="u4m’wini"
+```text
 myapp.com          → frontend-service
 myapp.com/api      → backend-service
 ```
@@ -345,11 +345,11 @@ Traffic gets forwarded accordingly.
 
 ---
 
-# 🔟 Traffic Finally Reaches Pods
+## 🔟 Traffic Finally Reaches Pods
 
 Final traffic flow:
 
-```text id="s1m’wini"
+```text
 User Browser
       ↓
 Cloud Load Balancer
@@ -363,7 +363,7 @@ Application Pods
 
 ---
 
-# 🌐 TLS/HTTPS Termination
+## 🌐 TLS/HTTPS Termination
 
 Ingress Controller commonly handles:
 
@@ -373,7 +373,7 @@ Ingress Controller commonly handles:
 
 Example:
 
-```yaml id="jlwm"
+```yaml
 tls:
   - hosts:
       - myapp.com
@@ -381,7 +381,7 @@ tls:
 
 ---
 
-# 🌐 What TLS Termination Means
+## 🌐 What TLS Termination Means
 
 Ingress Controller:
 
