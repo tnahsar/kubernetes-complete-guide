@@ -103,7 +103,7 @@ Applications communicating directly using Pod IPs will fail. ClusterIP service s
 
 ---
 
-## 3️⃣ NodePort (External Access via Node)
+## 3️⃣ NodePort (External Access via Node Port)
 
 ### What It Is
 
@@ -113,7 +113,7 @@ Applications communicating directly using Pod IPs will fail. ClusterIP service s
 ### How It Works
 
 * NodePort assigned → e.g., 30080
-* Access any node IP at `nodeIP:nodePort` → traffic routed to Pods
+* Access service at `nodeIP:nodePort` → traffic routed to Pods
 
 ### Example YAML
 

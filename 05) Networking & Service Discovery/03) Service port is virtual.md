@@ -1,7 +1,7 @@
 
 ---
 
-## ❓ “If Service is virtual, then where does port 80 come from?”
+## 🎯 “If Service is virtual, then where does port 80 come from?”
 
 ### Short, correct answer:
 
@@ -12,7 +12,7 @@ Now let’s unpack that carefully.
 
 ---
 
-# 🧠 What “port” Means in a Service
+## 🧠 What “port” Means in a Service
 
 When you write:
 
@@ -35,7 +35,7 @@ That’s it.
 
 ---
 
-# 🧩 Where Does ServiceIP:80 Exist?
+## 🧩 Where Does ServiceIP:80 Exist?
 
 ### Answer:
 
@@ -48,7 +48,7 @@ They exist only as **kernel-level NAT / routing rules**.
 
 ---
 
-# 🔧 Who Creates These Rules?
+## 🔧 Who Creates These Rules?
 
 `kube-proxy`
 
@@ -65,7 +65,7 @@ THEN DNAT to one of:
 
 ---
 
-# 🧠 Important Mental Shift
+## 🧠 Important Mental Shift
 
 ### Pods use **real ports**
 
@@ -84,7 +84,7 @@ They are just numbers used for:
 
 ---
 
-# 🔍 Why Do We Need a Service Port At All?
+## 🔍 Why Do We Need a Service Port At All?
 
 Because **clients need a stable contract**.
 
@@ -112,17 +112,7 @@ Internally:
 
 ---
 
-# 🧪 Think of It Like This
-
-### Service Port = Label on the door
-
-### Pod Port = Actual person inside
-
-The label doesn’t “do” anything — it just directs.
-
----
-
-# 🚨 Common Misunderstanding (Very Common)
+## 🚨 Common Misunderstanding (Very Common)
 
 > “Service opens port 80 on nodes”
 
@@ -136,7 +126,7 @@ Only these open real ports:
 
 ---
 
-# 🔁 What About NodePort / LoadBalancer?
+## 🔁 What About NodePort / LoadBalancer?
 
 That’s different 👇
 
@@ -152,13 +142,13 @@ That’s different 👇
 
 ---
 
-# 🎯 Interview-Grade One-Liner
+## 🎯 Interview-Grade One-Liner
 
 > **A Service port is a virtual port used only for traffic matching and forwarding; no process listens on it. Only Pods listen on real ports.**
 
 ---
 
-# ✅ Final Lock-in Table
+## ✅ Final Lock-in Table
 
 | Thing                | Real or Virtual? |
 | -------------------- | ---------------- |
@@ -169,11 +159,3 @@ That’s different 👇
 | Application listener | Real             |
 
 ---
-
-If you want next, I can:
-
-* Trace a packet **bit-by-bit**
-* Explain **why targetPort can differ**
-* Show **iptables rules example**
-
-Just say the word 👌

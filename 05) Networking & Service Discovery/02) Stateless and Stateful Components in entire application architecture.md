@@ -221,7 +221,7 @@ Replication depends on:
 
 ---
 
-## 5️⃣ Stateless vs Stateful Summary
+## 4️⃣ Stateless vs Stateful Summary
 
 | Stateless Microservices           | Stateful Components                |
 | --------------------------------- | ---------------------------------- |

@@ -1,7 +1,7 @@
 
 ---
 
-# 📘 How Service works
+# 📘 What Happens Internally When a ClusterIP Service Is Created
 
 When a Service object is created in Kubernetes, multiple Kubernetes components work together to provide:
 
@@ -38,7 +38,7 @@ spec:
 
 ---
 
-## 1️⃣ User Creates Service Object
+## 1️⃣ User creates 'ClusterIP` service object
 
 Command:
 
