@@ -163,7 +163,7 @@ api-service → 30081
 admin-service → 30082
 ```
 
-Managing many NodePorts quickly becomes difficult.
+Managing many ports becomes messy.
 
 ### ✅ LoadBalancer solves this problem
 Cloud Load Balancer provides:
@@ -297,6 +297,24 @@ Cloud Load Balancer:
 
 ---
 
+### 5️⃣ No TLS / Certificates (Properly)
+
+With NodePort:
+
+* You manage TLS yourself
+* Certificates on nodes
+* Painful renewals
+
+LoadBalancer/Ingress controller:
+
+✔ TLS termination
+✔ Managed certs (AWS ACM, GCP, Azure)
+✔ Secure by default
+
+Details will be covered in the next chapter.
+
+---
+
 ### ✅ When we can consider using `NodePort`
 
 * Local development
@@ -353,3 +371,20 @@ frontend-service
     ↓
 Frontend Pods
 ```
+
+---
+
+## 3️⃣ What LoadBalancer Actually Solves
+
+LoadBalancer gives you:
+
+| Problem                       | Solved by LB |
+| ----------------------------- | ------------ |
+| Stable public IP / DNS        | ✅            |
+| Health checks                 | ✅            |
+| TLS termination               | ✅            |
+| Traffic only to healthy nodes | ✅            |
+| Security integration          | ✅            |
+| Production readiness          | ✅            |
+
+---
