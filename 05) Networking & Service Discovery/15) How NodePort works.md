@@ -311,8 +311,36 @@ LoadBalancer/Ingress controller:
 ✔ Managed certs (AWS ACM, GCP, Azure)
 ✔ Secure by default
 
-Details will be covered in the next chapter.
+✅ Details will be covered in the next chapter.
 
+---
+### 6️⃣ No Smart Routing
+
+NodePort only forwards traffic based on ports and cannot perform intelligent HTTP routing such as:
+
+* path-based routing
+* domain-based routing
+* URL rewrites
+* centralized API routing
+
+Because NodePort works at `TCP/port level` NOT at `HTTP routing level`.
+
+This makes managing multiple applications difficult in production environments.
+
+✅ Ingress Controllers solve this problem by providing:
+
+* path-based routing
+* host-based routing
+* reverse proxy behavior
+* centralized HTTP routing
+
+### Example:
+
+```text
+myapp.com          → frontend-service
+myapp.com/api      → backend-service
+myapp.com/payment  → payment-service
+```
 ---
 
 ### ✅ When we can consider using `NodePort`
