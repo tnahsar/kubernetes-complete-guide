@@ -5,7 +5,7 @@
 
 Suppose your Kubernetes cluster contains these Services:
 
-```text id="f8m’wini"
+```text
 frontend-service  --> Frontend Pods
 backend-service   --> Backend Pods
 user-service      --> User Service Pods

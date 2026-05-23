@@ -1,20 +1,23 @@
-# 📘 How Kubernetes Pod Object Works Internally
-
-A Pod is the smallest deployable unit in Kubernetes.
-
-A Pod usually contains:
-
-* one or more containers
-* shared networking
-* shared storage
-
-Pods run application workloads inside the Kubernetes cluster.
 
 ---
 
-# Example Pod YAML
+# 📘 What happens internally when a pod object is created
 
-```yaml id="m2jlwm"
+When a Pod object is created in Kubernetes, multiple Kubernetes components work together to provide:
+
+* Pod scheduling
+* Pod networking
+* container runtime setup
+* shared network namespace
+* container creation and startup
+* Pod IP allocation
+* application execution inside containers
+
+---
+
+## Example Pod YAML
+
+```yaml
 apiVersion: v1
 kind: Pod
 
@@ -29,36 +32,27 @@ spec:
       ports:
         - containerPort: 80
 ```
-
 ---
 
-# 🌐 Step-by-Step Internal Working of Pod
+## 🌐 Step-by-Step Internal Working of Pod
 
----
-
-# 1️⃣ User Creates Pod Object
+## 1️⃣ User Creates Pod Object
 
 Command:
 
-```bash id="n4mjlwm"
+```bash
 kubectl apply -f pod.yaml
 ```
 
 The YAML is sent to:
 
-```text id="q7m’wini"
+```text
 kube-apiserver
 ```
 
 ---
 
-# 2️⃣ kube-apiserver Validates and Stores Pod Object
-
-Component:
-
-```text id="c1m’wini"
-kube-apiserver
-```
+## 2️⃣ `kube-apiserver` Validates and Stores Pod Object
 
 Responsibilities:
 
@@ -68,7 +62,7 @@ Responsibilities:
 
 At this stage:
 
-```text id="w5m’wini"
+```text
 Pod exists only as desired state metadata.
 ```
 
@@ -76,20 +70,14 @@ No container is running yet.
 
 ---
 
-# 3️⃣ Scheduler Detects Unschedulable Pod
-
-Component:
-
-```text id="t8m’wini"
-kube-scheduler
-```
+## 3️⃣ `kube-scheduler` detects unschedulable pod
 
 Responsibilities:
 
 * watches for Pods without assigned nodes
 * finds suitable worker node
 
-Scheduler evaluates:
+`kube-scheduler` evaluates:
 
 * CPU
 * memory
@@ -97,138 +85,70 @@ Scheduler evaluates:
 * affinity/anti-affinity
 * resource availability
 
+And assign a worker node to the pod.
+
 Example:
 
-```text id="x2m’wini"
+```text
 nginx-pod → worker-node-2
 ```
 
 Scheduler updates Pod spec:
 
-```yaml id="39rvfb"
+```yaml
 nodeName: worker-node-2
 ```
 
 ---
 
-# 4️⃣ kubelet Detects Assigned Pod
-
-Component:
-
-```text id="v9m’wini"
-kubelet
-```
-
-(runs on every worker node)
+## 4️⃣ `kubelet` detects assigned pod
 
 Responsibilities:
 
-* watches Pods assigned to its node
-* ensures containers are running
+* watches pods assigned to its node
 
 kubelet notices:
 
-```text id="k3m’wini"
+```text
 "This Pod should run on my node."
 ```
 
 ---
 
-# 5️⃣ kubelet Talks to Container Runtime
+## 5️⃣ kubelet talks to `container runtime` for pod sandbox creation.
 
-Component:
-
-```text id="m6m’wini"
-container runtime
-```
-
-Examples:
-
-* containerd
-* CRI-O
-* Docker (older setups)
-
-Responsibilities:
-
-* pull container image
-* create containers
-* start containers
-
----
-
-# 🌐 Container Creation Flow
-
-```text id="u1m’wini"
-kubelet
-    ↓
-container runtime
-    ↓
-pull nginx image
-    ↓
-create container
-    ↓
-start container
-```
-
----
-
-# 6️⃣ Pod Sandbox Is Created
-
-Before containers start, Kubernetes creates:
-
-```text id="r4m’wini"
-Pod Sandbox
-```
+Before containers start, `Kubelet` ask `Container Runtime` to create a Pod Sandbox
 
 The sandbox provides:
 
-* Pod network namespace
-* Pod IP
-* shared networking environment
+| Component         | Purpose                   |
+| ----------------- | ------------------------- |
+| Network namespace | Shared Pod networking     |
+| Pod IP            | Unique Pod address        |
+| Hostname          | Pod hostname              |
+| Linux namespaces  | Isolation                 |
+| Pause container   | Keeps Pod namespace alive |
 
-Usually implemented using:
 
-```text id="b8m’wini"
-pause container
+### 🌐 Pod sandbox creation flow
+
+```text
+kube-apiserver
+      ↓
+kubelet
+      ↓
+Container Runtime (containerd/CRI-O)
+      ↓
+Create Pod Sandbox
+      ↓
+Start Application Containers
 ```
+
+We will cover this concept in more detail in the next chapter.
 
 ---
 
-# 🌐 Why Pause Container Exists
-
-The pause container holds:
-
-* Pod network namespace
-* Pod lifecycle namespace
-
-All application containers join this shared namespace.
-
----
-
-# 🌐 Pod Networking Model
-
-```text id="y6m’wini"
-Pod
- ├── pause container
- ├── nginx container
- └── sidecar container
-```
-
-All containers share:
-
-* same Pod IP
-* same localhost
-* same port space
-
----
-
-# 7️⃣ CNI Plugin Configures Networking
-
-Component:
-
-```text id="j5m’wini"
-CNI Plugin
-```
+## 6️⃣ `CNI Plugin` Configures Networking
 
 Examples:
 
@@ -238,19 +158,21 @@ Examples:
 
 Responsibilities:
 
-* assign Pod IP
-* configure virtual interfaces
-* connect Pod to cluster network
+* assigns Pod IP
+* creates virtual network interfaces
+* configures routing
+* enables cross-node Pod communication
+* may provide network policies/security
 
 Example:
 
-```text id="f2m’wini"
+```text
 Pod IP → 10.244.0.5
 ```
 
 ---
 
-# 8️⃣ Application Opens Ports
+## 7️⃣ Application Opens Ports
 
 Inside the container:
 
@@ -259,13 +181,13 @@ Inside the container:
 
 Example:
 
-```text id="n7m’wini"
+```text
 nginx listens on port 80
 ```
 
 Important:
 
-```text id="q1m’wini"
+```text
 Applications open ports — not containers.
 ```
 
@@ -273,29 +195,27 @@ Ports belong to:
 
 * Pod shared network namespace
 
----
+### 🌐 Traffic Flow
 
-# 🌐 Traffic Flow
-
-```text id="s4m’wini"
+```text
 Client Request
-      ↓
+        ↓
 Pod IP:80
-      ↓
+        ↓
 Linux Kernel
-      ↓
+        ↓
 nginx process inside container
 ```
 
 ---
 
-# 9️⃣ Pod Status Updated
+## 8️⃣ Pod Status Updated
 
 kubelet continuously updates Pod status:
 
 Example:
 
-```text id="z9m’wini"
+```text
 Pending
 Running
 Succeeded
@@ -305,15 +225,15 @@ CrashLoopBackOff
 
 Status stored through:
 
-```text id="g3m’wini"
+```text
 kube-apiserver → etcd
 ```
 
 ---
 
-# 🌐 Final Running Architecture
+## 🌐 Final Running Architecture
 
-```text id="p6m’wini"
+```text
 Pod
  ├── Network Namespace
  ├── Storage Volumes
@@ -323,7 +243,7 @@ Pod
 
 ---
 
-# 📘 Important Clarification
+## 📘 Important Clarification
 
 Pod itself does NOT:
 
@@ -343,7 +263,7 @@ Actual work is performed by:
 
 ---
 
-# 🌐 Kubernetes Components Involved
+## 🌐 Kubernetes Components Involved
 
 | Component         | Responsibility               |
 | ----------------- | ---------------------------- |
@@ -357,9 +277,9 @@ Actual work is performed by:
 
 ---
 
-# 📘 Pod Lifecycle Summary
+## 📘 Pod Lifecycle Summary
 
-```text id="d8m’wini"
+```
 User creates Pod
         ↓
 kube-apiserver stores Pod
@@ -368,9 +288,11 @@ Scheduler assigns node
         ↓
 kubelet detects Pod
         ↓
-Container runtime starts containers
+Container runtime creates Pod sandbox
         ↓
-CNI configures networking
+CNI configures Pod networking
+        ↓
+Container runtime starts containers
         ↓
 Pod becomes Running
 ```
