@@ -188,33 +188,27 @@ Pod Sandbox (Environment)
 
 Examples:
 
-* Calico
-* Flannel
-* Cilium
+| CNI Plugin | Speciality                      |
+| ---------- | ------------------------------- |
+| Flannel    | Simple overlay networking       |
+| Weave Net  | Multi-host container networking |
+| Calico     | Networking + Network Policies   |
+| Cilium     | eBPF-based advanced networking  |
 
 Responsibilities:
 
-* assigns Pod IP
-* creates virtual network interfaces
-* configures routing
-* enables cross-node Pod communication
-* may provide network policies/security
-
-Example:
-
-```text
-Pod IP → 10.244.0.5
-```
+| Responsibility                                  | Purpose                                                     |
+| ----------------------------------------------- | ----------------------------------------------------------- |
+| Create and configure virtual network interfaces | Sets up network interfaces inside the Pod network namespace |
+| Assign Pod IP                                   | Gives a unique IP address to the Pod                        |
+| Configure routes                                | Enables packet routing between networks                     |
+| Connect Pod to cluster network                  | Enables Pod-to-Pod and cluster communication                |
+| Setup NAT/firewall rules *(plugin dependent)*   | Controls traffic flow                                       |
+| Enable cross-node networking                    | Allows Pods on different nodes to communicate               |
 
 ---
 
 ## 7️⃣ kubelet talks to `container runtime` for container creation.
-
-Examples:
-
-* containerd
-* CRI-O
-* Docker (older setups)
 
 Responsibilities:
 
@@ -275,9 +269,14 @@ nginx process inside container
 
 ## 8️⃣ Pod Status Updated
 
+Pod Becomes Running
+
 kubelet continuously updates Pod status:
 
-Example:
+```text id="f2m’wini"
+Pod status = Running
+```
+Other pod statuses can be:
 
 ```text
 Pending
@@ -295,18 +294,6 @@ kube-apiserver → etcd
 
 ---
 
-## 🌐 Final Running Architecture
-
-```text
-Pod
- ├── Network Namespace
- ├── Storage Volumes
- ├── pause container
- └── Application Containers
-```
-
----
-
 ## 📘 Important Clarification
 
 Pod itself does NOT:
@@ -318,16 +305,7 @@ Pod is:
 
 * a declarative Kubernetes object
 
-Actual work is performed by:
-
-* kube-scheduler
-* kubelet
-* container runtime
-* CNI plugins
-
----
-
-## 🌐 Kubernetes Components Involved
+Actual work is performed by kubernetes components
 
 | Component         | Responsibility               |
 | ----------------- | ---------------------------- |
@@ -335,7 +313,7 @@ Actual work is performed by:
 | etcd              | Stores cluster state         |
 | kube-scheduler    | Assigns Pod to node          |
 | kubelet           | Manages Pod lifecycle        |
-| container runtime | Runs containers              |
+| container runtime | Creates Pod sandbox + namespaces + pause container + runs containers  |
 | CNI plugin        | Configures networking        |
 | Linux kernel      | Manages namespaces & sockets |
 
