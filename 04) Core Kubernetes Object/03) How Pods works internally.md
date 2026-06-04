@@ -139,6 +139,7 @@ Pod Sandbox Environment Preparation
 The Pod sandbox environment includes:
 
 * shared Linux namespaces (network, IPC, UTS, PID optional)
+* Container-specific namespaces (mount namespace)
 * pause container (stable process attached to shared namespaces)
 * Pod networking setup (CNI configuration)
 * Pod IP (after CNI configuration)
