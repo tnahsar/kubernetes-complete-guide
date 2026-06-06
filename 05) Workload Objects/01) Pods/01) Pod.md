@@ -46,6 +46,20 @@ Container orchestration capabilities provided by Kubernetes:
 
 We will learn which Kubernetes objects provide specific orchestration capabilities.
 
+Most `Kubernetes orchestration objects` ultimately manage Pods.
+
+Examples:
+
+| Higher-Level Object | Ultimately Manages |
+| ------------------- | ------------------ |
+| Deployment          | Pods               |
+| StatefulSet         | Pods               |
+| DaemonSet           | Pods               |
+| Job                 | Pods               |
+| CronJob             | Jobs → Pods        |
+
+This is why Pods are considered the fundamental execution unit of Kubernetes.
+
 ---
 
 ## 4️⃣ What Does a `Pod` Provide?
