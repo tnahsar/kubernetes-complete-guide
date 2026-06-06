@@ -3,7 +3,7 @@
 
 # 📘 Stateless and Stateful Components in Application Architecture
 
-In Kubernetes, application architecture consists of both stateless and stateful components. Understanding the difference is crucial for designing and deploying applications effectively.
+Application architecture consists of both stateless and stateful components. Understanding the difference is crucial for designing and deploying applications effectively.
 
 * Frontend, backend, and authentication service are commonly called microservices.
 * Databases, caches, messaging systems, and search platforms are commonly considered stateful infrastructure components.
@@ -44,9 +44,8 @@ Example:
 
 These are usually deployed using:
 
-* Deployment
-* ReplicaSet
-* ClusterIP Service
+* Deployment object
+* ClusterIP/NodePort/Load Balancer Service
 
 ### Frontend Application
 
@@ -123,13 +122,12 @@ A stateful components:
 Example:
 
 * databases
-* Kafka
+* Redis cache
 * Elasticsearch
-* distributed databases and messaging systems
 
 These are commonly deployed using:
 
-* StatefulSet
+* StatefulSet object
 * Headless Service
 
 ### MySQL Database Cluster
