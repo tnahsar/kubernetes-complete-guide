@@ -5,6 +5,18 @@
 
 ---
 
+## 9️⃣ Pod Lifecycle
+
+1. Pod created
+2. Container starts
+3. App runs
+4. Pod terminates
+5. New Pod may be created
+
+Kubernetes handles this automatically.
+
+---
+
 ## 1️⃣ Why Pod Lifecycle Matters
 
 When something goes wrong in Kubernetes:
