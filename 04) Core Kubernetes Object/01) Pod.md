@@ -35,7 +35,7 @@ Kubernetes provides `orchestration features` that become important when running 
 
 Container orchestration capabilities provided by Kubernetes:
 
-* Share networking, volume, lifecycle and certain Linux namespaces.
+* Share networking, volume, pod lifecycle and certain Linux namespaces.
 * Self-healing
 * Scaling
 * Application high availability
@@ -48,15 +48,11 @@ We will learn which Kubernetes objects provide specific orchestration capabiliti
 
 ---
 
-## 4️⃣ What Does a Pod Provide?
+## 4️⃣ What Does a `Pod` Provide?
 
 A Pod gives containers:
 
 ### ✅ Shared network
-
-* Same IP address
-* Same port space
-* `localhost` works between containers
 
 A Pod gets one IP address that represents the entire Pod, not individual containers inside it.
 
@@ -71,7 +67,7 @@ Both containers do not get separate IP addresses. Instead, they share the same n
 * One port space
 * One network identity
 
-Because both the containers share the same network stack. So, inside a Pod they can communicate with each other via `localhost`. No need for internal `service discovery`.
+Because both the containers share the same network namespace. So, inside a Pod they can communicate with each other via `localhost`. No need for internal `service discovery`.
 
 ### ✅ Shared volume
 
@@ -85,80 +81,52 @@ Pod
 │     └── /logs              ─┘
 ```
 Both containers see the same files.
+    
+### ✅ Shared Pod Lifecycle
 
-* Shared volumes
-* Same filesystem mounts
+Shared Pod lifecycle in Kubernetes means that containers within a Pod are treated as a single deployment unit: they are `scheduled together`, `created together`, and `terminated together`, while still allowing individual containers to `restart independently` if needed.
 
-Types of shared volumes:
-* Temporary storage (emptyDir): Shared between containers, got deleted when Pod dies.
-* Persistent storage (PersistentVolumeClaim): PersistentVolumeClaim (PVC) provides the storage that can survive Pod deletion. This storage can be shared one multiple containers of one pod or optionally it can be shared between Pods as well, depending on the `storage backend system` and `access mode`.
+> Containers share the same `Pod-level lifecycle events` and `management boundary`.
 
-    Case 1: ReadWriteOnce (RWO) — most common
-    * Only one Pod can mount it at a time
-    * NOT shared across Pods simultaneously
-    * Can be shared between containers of the same Pod
+### Scheduled together:
+When a Pod is scheduled to a node, all containers in that Pod are scheduled together to the same node.
 
-    ```text
-    Pod A ✔ uses PVC
-    Pod B ❌ cannot use same PVC at same time
-    ```
+```text
+Pod scheduled to Node 1
+├── container A scheduled to Node 1
+└── container B scheduled to Node 1
+``` 
+### Created together:
+When a Pod is created, all containers in that Pod are created together.
 
-    Case 2: ReadWriteMany (RWX)
-    * Multiple Pods can mount it simultaneously i.e. shared across Pods
-    * Also, can be shared between containers of the same Pod
+```text
+Pod created
+├── container A created
+└── container B created
+```
+### Terminated together:
+When a Pod is deleted, all containers in that Pod are terminated together.
 
-    ```
-    Pod A ─┐
-       ├── shared PVC
-    Pod B ─┘
-    ```
+```text
+Pod deleted
+├── container A stops
+└── container B stops
+```
+### Restart independently:
+If one container crashes, Kubernetes may restart only that container, not the entire Pod.
 
-    Case 3: ReadOnlyMany (ROX)
-    * Multiple Pods can mount it simultaneously
-    * Read-only access across Pods
-    * Can be shared between containers of the same Pod
-
-    Storage that supports sharing between Pods (RWX)
-
-    To share a PVC across multiple Pods at the same time, the storage must support ReadWriteMany (RWX).
-
-    Common RWX-capable storage types
-    ✔ Network File System (NFS)
-    Classic shared filesystem
-    Multiple Pods can mount it simultaneously
-    ✔ CephFS (Ceph File System)
-    Distributed filesystem
-    Strong RWX support
-    ✔ GlusterFS (less common now)
-    Shared filesystem across nodes
-    ✔ Cloud file storage services
-    Amazon EFS
-    Azure Files
-    Google Filestore
-
-    These are designed for shared access across multiple Pods/nodes.
-
-    2. Storage that does NOT support sharing between Pods (usually RWO)
-
-    These are block storage systems. They attach a disk to one node/Pod at a time.
-
-    Common RWO storage types
-    ✖ Cloud block storage
-    Amazon EBS
-    Google Persistent Disk
-    Azure Disk
-    Behavior:
-    Only one Pod can mount at a time (in most cases)
-    If another Pod tries to mount it → it fails or waits
-
-### ✅ Shared Lifecycle
-
-* Start together
-* Stop together
-* Restart together
+```text
+Pod running
+├── container A ❌ crashed → restarted
+└── container B ✅ still running
+```
 
 ### ✅ Shared Linux Namespaces
-
+Containers in a Pod share certain Linux namespaces:
+* Network namespace
+* IPC namespace
+* UTS namespace (hostname)
+* PID namespace (optional)
 
 ---
 
@@ -168,68 +136,37 @@ Most Pods have **one container**.
 
 Example:
 
-* One Pod
-* One Nginx container
-
-Why?
-
-* Simple
-* Scalable
-* Easy to manage
+* One Pod i.e. for ex nginx container
 
 ---
 
 ## 6️⃣ Multi-Container Pod (Sidecar Pattern)
 
-Sometimes Pods have **multiple containers**.
+Sometimes a Pod contains **multiple containers** when they are tightly coupled and need to run together. These containers are always co-located on the same node, share the same network namespace, and can share volumes. Because of this, Kubernetes treats the Pod as a single application instance. As a result, containers inside a Pod are created and terminated together as part of the Pod, while still being individually managed at runtime.
 
 Example:
 
 * App container
 * Log collector container
 
-Why?
-
-* Tight coupling
-* Need to share storage or network
-
-Containers in a Pod are:
-
-* Deployed together
-* Scaled together
-
 ---
 
 ## 7️⃣ Pod Is Ephemeral (Very Important)
 
-Pods:
+* Pods can die anytime (rescheduled, node failure, scaling)
+* Pods are not permanent
+* Pod IPs can change when recreated
 
-* Can die anytime
-* Are NOT permanent
-* Can be recreated with new IP
+👉 **Never store important data in the `ephemeral filesystem` of a container inside a Pod**
 
-👉 **Never store data inside Pods**
-
-Use:
-
-* Volumes
-* Persistent storage
+Use instead:
+* Temporary shared storage (emptyDir): Use ephemeral volumes to stores temporary files, caches and inter-container communication. Becuase this data will be lost when Pod dies.
+* `PersistentVolumeClaims` for data that must survive Pod lifecycle. For ex. databases, user uploads
+and logs.
 
 ---
 
-## 8️⃣ Pod Lifecycle (Simple View)
-
-1. Pod created
-2. Container starts
-3. App runs
-4. Pod terminates
-5. New Pod may be created
-
-Kubernetes handles this automatically.
-
----
-
-## 9️⃣ You Rarely Create Pods Directly
+## 8️⃣ You Rarely Create Pods Directly
 
 In real life:
 
@@ -237,7 +174,7 @@ In real life:
 * Deployments create Pods
 * Pods come and go
 
-Creating Pods directly:
+We may create Pods directly in the cases of:
 
 * Learning
 * Debugging
@@ -265,7 +202,7 @@ Creating Pods directly:
 
 * Kubernetes runs Pods, not containers
 * Pod = shared network + storage
-* Pods are disposable
+* Pods are ephemeral
 * Usually one container per Pod
 
 ---
