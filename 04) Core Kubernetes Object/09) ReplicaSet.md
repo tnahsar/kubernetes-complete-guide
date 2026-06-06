@@ -18,7 +18,7 @@ If a Pod crashes:
 
 * **Self-healing**
 * **Scaling**
-* **High availability by maintaining desired Pod count**
+* **Application high availability by maintaining desired Pod count**
 
 ---
 
@@ -234,14 +234,14 @@ Less users → Less requests → Lower CPU → reduce Pods
 
 ---
 
-## 8️⃣ High Availability with ReplicaSets
+## 8️⃣ Application High Availability with ReplicaSets
 
-High Availability (HA) means:
+Application High Availability (HA) means:
 
 ```text
 Application remains available even if some Pods fail
 ```
-ReplicaSet helps achieve high availability by maintaining the desired number of running Pods.
+ReplicaSet helps achieve application high availability by maintaining the desired number of running Pods.
 
 Example:
 
@@ -276,7 +276,7 @@ Because multiple Pod replicas are running:
 * service availability improves
 * traffic can continue flowing
 
-✅ ReplicaSet provides high availability by maintaining the desired number of healthy Pod replicas.
+✅ ReplicaSet provides application high availability by maintaining the desired number of healthy Pod replicas.
 
 ---
 
@@ -313,7 +313,7 @@ ReplicaSet only manages:
 
 * Self-healing
 * Scaling
-* High availability by maintaining desired Pod count
+* Application High availability by maintaining desired Pod count
 
 ---
 
