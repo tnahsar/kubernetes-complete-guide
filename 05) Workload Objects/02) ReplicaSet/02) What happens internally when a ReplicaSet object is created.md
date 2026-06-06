@@ -1,4 +1,4 @@
-# 📘 How Kubernetes ReplicaSet Object Works Internally
+# 📘 What happens internally when a ReplicaSet object is created
 
 A ReplicaSet is a Kubernetes controller object responsible for:
 
