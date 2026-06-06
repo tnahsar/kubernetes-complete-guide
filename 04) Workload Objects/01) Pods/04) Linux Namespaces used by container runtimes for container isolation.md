@@ -1,11 +1,21 @@
 
 ---
 
-# 📘 Linux Namespaces used by Kubernetes for pod isolation
+# 📘 Linux Namespaces used by container runtimes for container isolation
 
-Kubernetes uses multiple Linux namespaces to isolate the Pod environment.
+Container runtime makes the actual calls to the `Linux kernel` to create:
+* namespaces - For container isolation
+* cgroups - For container resources allocation and limitation
 
-These namespaces are created during:
+This means containers run as isolated Linux processes inside Kubernetes.
+
+### 🧠 We saw containers are isolated, then why do we say pods are isolated?
+
+* Pods themselves are Kubernetes abstractions, not Linux kernel objects.
+* The actual isolation happens at the container level using Linux namespaces.
+* However, containers belonging to different Pods usually run in separate Linux namespaces. Therefore, Pods are isolated from each other because containers in different Pods run in separate Linux namespaces.
+
+These Linux namespaces are created during:
 
 ```text
 Pod sandbox creation
