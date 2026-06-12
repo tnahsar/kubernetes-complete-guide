@@ -22,13 +22,11 @@ In 2013, when Docker was first released, **Docker Engine** was composed of multi
 * **Container Runtime** – Docker’s internal runtime logic (pre-OCI), which later evolved into `runc` (execution) and `containerd` (lifecycle)
 
 Apart from Docker Engine, Docker also provides the **Docker CLI**.
-* **Docker CLI was a separate client tool** that communicated with Docker Engine through the REST API.
+* **Docker CLI was a separate client tool** that communicate with Docker daemon through the REST API.
 
-### How Docker CLI communicates with Docker Engine
-
-```
-Docker CLI ──▶ REST API ──▶ Docker Daemon
-```
+   ```
+   Docker CLI ──▶ REST API ──▶ Docker Daemon
+   ```
 
 So when you run:
 
@@ -36,7 +34,7 @@ So when you run:
 docker run nginx
 ```
 
-The CLI sends a request to the **Docker Engine REST API**, which the daemon processes.
+The CLI sends a request to **Docker daemon via REST API**, so the request being processed by daemon.
 
 > Important: The REST API isn’t a *separate service* you install—it’s **embedded in the Docker daemon** and enabled by default.
 
@@ -50,12 +48,10 @@ The CLI sends a request to the **Docker Engine REST API**, which the daemon proc
 
 * Docker Engine had:
 
-   * Image building
-   * Image storage
-   * Container lifecycle (create, start, stop)
-   * Container execution
-   * Networking
-   * Volumes
+   * Docker Daemon
+   * Rest API
+   * container runtime
+
 * All tightly coupled inside Docker Engine
 
 **Architectural Flow**
@@ -63,9 +59,9 @@ The CLI sends a request to the **Docker Engine REST API**, which the daemon proc
 ```
 Docker CLI
    ↓
-dockerd
+Docker daemon (dockerd)
    ↓
-Docker internal runtime
+Docker container runtime
    ↓
 Linux kernel
 ```
@@ -91,31 +87,27 @@ Docker:
 ```
 dockerd
    ↓
-runc (external call)
+runc
    ↓
 Linux kernel
 ```
 
-### 🧩 Why Docker split runc?
+### 🧩 Why Docker Split `runc`?
 
-* To comply with **OCI Runtime Spec**
-* To allow:
-  * Runtime replacement (`runc`, `crun`, `kata-runtime`, `gVisor`,etc.)
-  * Runtime reuse by other platforms
-* To decouple low-level execution from Docker
-
+* To comply with the **OCI Runtime Specification**
+* To make `runc` open-source so oKubernetes and other orchestration systems could use it as a standard low-level container runtime
+* To decouple low-level container execution from Docker, enabling runtime flexibility through support for different OCI-compatible runtimes such as `runc`, `crun`, `Kata Containers`, and `gVisor`
 
 > After spliting `runc` Docker was **still monolithic in practice**, just cleaner internally.
 
 ---
 
-### 🔹 2016–2017: `containerd` Is Extracted (True Modularization)
+### 🔹 2016–2017: `containerd` is extracted (True Modularization)
 
-Docker:
-
-* Extracted lifecycle + image management into `containerd`
-* `containerd` became a **separate daemon**
 * In 2017, Docker donated `containerd` to CNCF (Cloud Native Computing Foundation)
+* Docker extracted lifecycle + image management into `containerd`
+* `containerd` became a **separate high-level container runtime**
+
 
 **New architectural flow**
 * Here, **containerd invoking runc as an external OCI runtime.**
@@ -126,18 +118,20 @@ dockerd
    ↓
 containerd
    ↓
-runc (external call)
+runc
    ↓
 Linux kernel
 ```
 
-### 🧩 Why Docker split containerd?
-* To **Separate Lifecycle Management** from Docker UX
-   * By splitting `containerd`, Docker:
-      * Kept **developer UX** in Docker
-      * Moved **container lifecycle management** to a reusable component
-* To allow Kubernetes and other orchestration systems to use a lightweight, vendor-neutral `containerd` runtime directly, without Docker-specific dependencies
-* To comply with **OCI Image & Runtime Specs**
+### 🧩 Why Docker Split `containerd`?
+
+* To align with the CNCF and the broader cloud-native ecosystem
+* To allow Kubernetes and other orchestration platforms to use a lightweight, vendor-neutral container runtime `containerd` without depending on the full Docker Engine
+* To separate container lifecycle management from Docker-specific features and tooling
+* By donating `containerd` to CNCF:
+  * community trust increased
+  * vendor lock-in concerns were reduced
+  * industry adoption accelerated
 * To Reduce Tight Coupling in Docker Engine
    * Before:
       * Any runtime change impacted the entire engine
@@ -146,12 +140,6 @@ Linux kernel
       * Components evolved independently
       * Better maintainability
       * Cleaner architecture
-* To Align with CNCF & Cloud-Native Ecosystem
-   * Docker realized: “The runtime layer should be neutral and shared.”
-   * By donating `containerd` to CNCF:
-      * Gained community trust
-      * Avoided vendor lock-in fears
-      * Accelerated adoption
 
 ---
 
@@ -194,44 +182,6 @@ That’s the architectural truth.
 
 ---
 
-### 🔹 `runc` — Low-Level Container Execution
-
-**What it does:**
-
-* Creates containers using Linux primitives
-* Sets up:
-
-  * Namespaces
-  * cgroups
-  * Mounts
-* Starts the container process
-
-**Key points:**
-
-* Very small
-* Does one job extremely well
-* Implements the **OCI Runtime Specification**
-
-👉 Think of `runc` as:
-
-> “The thing that actually starts a container process”
-
-
-### 📜 OCI Angle (Important)
-
-OCI defines:
-* Image spec
-* Runtime spec
-* How a `runc` runtime **must be invoked**
-* What files it consumes (`config.json`, rootfs)
-
-So Docker had to:
-
-* Call `runc` externally
-* Follow the OCI contract
-
----
-
 ### 🔹 `containerd` — Container Lifecycle Manager
 
 **What it does:**
@@ -250,11 +200,51 @@ So Docker had to:
 
 * Long-running daemon
 * Higher-level than `runc`
-* OCI-compliant
 
 👉 Think of `containerd` as:
 
 > “The manager that tells `runc` what to run”
+
+---
+
+### 🔹 `runc` — Low-Level Container Execution
+
+**What it does:**
+
+* Creates containers using Linux primitives
+  * Namespaces
+  * cgroups
+  * Mounts
+* Starts the container process
+
+**Key points:**
+
+* Very small
+* Does one job extremely well
+* Implements the **OCI Runtime Specification**
+
+👉 Think of `runc` as:
+
+> “The thing that actually starts a container process”
+
+---
+
+### 📜 OCI Angle (Important)
+
+OCI defines:
+* Image spec
+* Runtime spec
+* How a `runc` runtime **must be invoked**
+* What files it consumes (`config.json`, rootfs)
+
+So `containerd` had to:
+
+* Call `runc` externally
+* Follow the OCI contract
+
+That's why we can say that, "`runc` is the OCI compliant executor, and `containerd` is the OCI compliant manager that calls runc".
+
+* `Containerd` is an OCI-compliant manager because it natively understands how to build the exact workspace that runc expects, and it knows exactly how to invoke runc according to the official standard.
 
 ---
 
@@ -267,22 +257,11 @@ So Docker had to:
 
 ---
 
-### 🔧 Roles Recap (Super Important)
-
-| Component     | Responsibility                     |
-| ------------- | ---------------------------------- |
-| `runc`        | Actually creates & runs containers |
-| `containerd`  | Manages container lifecycle        |
-| Docker Engine | Adds build, UX, tooling            |
-| Kubernetes    | Orchestrates containers            |
-
----
-
 ### Why Kubernetes Moved to Containerd:
 
-The **primary reason** Kubernetes moved to **containerd** was to **reduce unnecessary complexity** and create a more **focused and lightweight** system. While Docker was a great tool for general-purpose container management, Kubernetes only needed a subset of Docker's functionality—specifically, the **container runtime**.
+The **primary reason** Kubernetes moved to **containerd** was to **reduce unnecessary complexity** and create a more **focused** orchestration system. While Docker was a great tool for general-purpose container management, Kubernetes only needed a subset of Docker's functionality i.e. - **container runtime**.
 
-* Kubernetes didn’t want the extra overhead of components like the Docker daemon, image-building tools, or networking features. Kubernetes just needed a runtime to **start, stop, and manage containers**, and **containerd** was designed specifically for this. It provides the minimum set of features required to achieve this efficiently.
+* Kubernetes didn’t want the extra overhead of components like the Docker daemon, docker cli, image-building tools, or networking features. Kubernetes just needed a runtime to **start, stop, and manage containers**, and **containerd** was designed specifically for this. It provides the minimum set of features required to achieve this efficiently.
 
 > **Kubernetes uses containerd as its container runtime, and containerd internally uses runc to execute containers.**
 
@@ -292,12 +271,12 @@ Kubernetes
    ↓
 containerd
    ↓
-runc (external call)
+runc
    ↓
 Linux kernel
 ```
 
-> Because of `runc` being OCI-complaint: Kubernetes can swap runtimes easily. Like it can select `crun`, `kata-runtime`, `gVisor ` or any other as its low-level runtime.
+> Runtime flexibility: Because of `runc` being OCI-complaint: Kubernetes can swap runtimes easily. Like it can select `crun`, `kata-runtime`, `gVisor ` or any other as its low-level runtime.
 
 ---
 

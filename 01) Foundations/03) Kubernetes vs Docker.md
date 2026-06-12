@@ -5,16 +5,14 @@
 
 Docker and Kubernetes solves **different problem** at **different stages** of the application lifecycle.
 
-### 1️⃣ Docker solved packing & runtime problem
+### 1️⃣ Docker solved packing problem
 
 * Packaging the **application code, runtime** (e.g., JVM, Python, Node), **system libraries**, and other dependencies into a **single immutable image**.
 * Making applications **portable, reproducible, and consistent** across different environments.
 
 ### 2️⃣ Kubernetes solved orchestration problem
 
-* **Kubernetes** comes to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, and service discovery reliably.
-
-Also, to address operational challenges at a basic level, **Docker** introduced **Docker Swarm**, which provided features like multi-host container management, basic auto-healing, and replica-based scaling.
+* **Kubernetes** comes to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, rollbacks, and service discovery reliably.
 
 ### What Docker was NOT Designed For
 
@@ -25,15 +23,14 @@ Also, to address operational challenges at a basic level, **Docker** introduced 
 > * Rolling deployments
 > * Service discovery across machines
 >
-> 👉 These features require **an orchestration layer**. So Docker came up with **Docker Swarm**.
+> 👉 These features require **an orchestration layer**. So Docker came up with **Docker Swarm**. But **Docker Swarm** was able to address operational challenges at a basic level, providing features like multi-host container management, basic auto-healing, and replica-based scaling.
 
 ### 🕰️ Docker Swarm — Correct Timeline
 
 ### ✅ 2015 — Docker Swarm (Classic)
 
 * Introduced as **Docker Swarm (standalone / classic)**
-* Separate project from Docker Engine
-* Used Docker API
+* **Separate project** from Docker Engine
 * Required extra setup
 * Competing with Kubernetes & Mesos
 
@@ -41,7 +38,7 @@ Also, to address operational challenges at a basic level, **Docker** introduced 
 
 ### ✅ 2016 — Docker Swarm Mode
 
-* Introduced in **Docker 1.12**
+* Later Docker introduced **Swarm Mode** in **Docker 1.12**
 * Swarm became **native to Docker Engine**
 * No separate installation
 * Used Docker CLI (`docker service`, `docker stack`)
@@ -57,12 +54,12 @@ Also, to address operational challenges at a basic level, **Docker** introduced 
 
 👉 Docker was **never designed** for orchestration.
 * Why we are saying this because
-    * Docker **originally solved packaging & runtime** problems
+    * Docker **originally solved packaging** problems
     * **Orchestration** came later via **Swarm**
     * **Docker Engine’s core design is still single-host focused**
     * **Swarm is an add-on orchestration mode, not Docker’s primary identity**.
 
-So, though Docker launched Swarm, but that was providing basic orchestration and **was not sufficient for large-scale operations**. This is where **Kubernetes** comes in — providing a robust platform to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, and service discovery reliably.
+So, though Docker launched Swarm, but that was providing basic orchestration and **was not sufficient for large-scale operations**. This is where **Kubernetes** comes in — providing a robust platform to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, rollbacks and service discovery reliably.
 
 > 👉 Today, Kubernetes is the dominant and preferred orchestrator. 
 
@@ -74,9 +71,8 @@ Docker handles:
 
 * Building container images
 * Running containers on a node
-* Managing container filesystem (image layers, writable layer)
-* Providing basic container networking
 * Handling container lifecycle on a single node (start / stop)
+* Managing container filesystem (image layers, writable layer)
 
 > Docker is **great on a single machine**.
 
@@ -126,7 +122,7 @@ Kubernetes works **on top of a container runtime**.
 * Docker is still commonly used to **build images**
 
 👉 Kubernetes **does NOT need Docker Engine**
-👉 Kubernetes **DOES need containers**
+👉 Kubernetes **does need container tun**
 
 ---
 
@@ -140,7 +136,7 @@ Kubernetes works **on top of a container runtime**.
 
 3️⃣ Kubernetes pulls the image
 
-4️⃣ Kubernetes runs it using **containerd**
+4️⃣ Kubernetes runs it using container runtime **containerd**
 
 5️⃣ Kubernetes manages scaling & failures
 
