@@ -51,26 +51,38 @@ apiVersion: apps/v1kind: Deploymentmetadata:
         ports:
         - containerPort: 8080
         
-        # Liveness Probe configuration
+         # 1. THE SHIELD (Startup Probe)
+        # Holds off Liveness & Readiness checks until the app is fully initialized.
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          periodSeconds: 10      # Check every 10 seconds
+          failureThreshold: 30   # Try up to 30 times (Allows up to 5 minutes to boot)
+          # Note: If the app boots in 15 seconds, this probe stops instantly and activates the next two.
+
+        # 2. THE WATCHDOG (Liveness Probe)
+        # Only starts AFTER startupProbe succeeds. Keeps the app from freezing up long-term.
         livenessProbe:
           httpGet:
             path: /healthz
             port: 8080
-          initialDelaySeconds: 15
-          periodSeconds: 20
-          timeoutSeconds: 2
-          failureThreshold: 3
+          initialDelaySeconds: 0 # Zero delay needed because startupProbe handled the warm-up
+          periodSeconds: 10      # Check every 10 seconds during regular operation
+          timeoutSeconds: 2      # Must respond within 2 seconds
+          failureThreshold: 3    # Restart container if it fails 3 times consecutively (30s total)
 
-        # Readiness Probe configuration
+        # 3. THE GATEKEEPER (Readiness Probe)
+        # Only starts AFTER startupProbe succeeds. Controls network traffic flow.
         readinessProbe:
           httpGet:
             path: /ready
             port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 10
-          timeoutSeconds: 2
-          failureThreshold: 2
-
+          initialDelaySeconds: 0 # Zero delay needed because startupProbe handled the warm-up
+          periodSeconds: 5       # Check aggressively every 5 seconds to catch network lag
+          timeoutSeconds: 2      # Must respond within 2 seconds
+          failureThreshold: 2    # Pull out of the load balancer if it fails twice (10s total)
+          successThreshold: 1    # Put back into the load balancer immediately after 1 success
 ------------------------------
 ## 📑 Parameter Reference
 
