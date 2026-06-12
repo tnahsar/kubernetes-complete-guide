@@ -3,7 +3,7 @@
 
 # 📘 Chapter 7: What is a Pod? (smallest unit in Kubernetes)
 
-> **A Pod is a wrapper around one container or more containers that share the resources.**
+> **A Pod is a wrapper around one or more containers that share the resources.**
 
 Think of Pod as:
 

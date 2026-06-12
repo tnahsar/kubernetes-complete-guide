@@ -83,8 +83,8 @@ ReplicaSet manages Pods.
 Provides:
 
 * Self-healing
-* Replica management
-* High availability
+* Scaling
+* Application high availability by maintaining desired Pod count
 
 If a Pod crashes:
 
@@ -103,7 +103,7 @@ Provides:
 * Rolling updates
 * Rollbacks
 * Declarative application upgrades
-* Scaling
+* Scaling using ReplicaSet
 
 Typical hierarchy:
 
@@ -130,14 +130,14 @@ Provides:
 * Stable Pod names
 * Stable network identity
 * Persistent storage association
-* Ordered startup and shutdown
+* Ordered pod startup and shutdown
 
 Commonly used for:
 
 * MySQL
 * PostgreSQL
 * MongoDB
-* Kafka
+* Redis
 
 ---
 
@@ -199,7 +199,7 @@ Provides:
 
 * Stable virtual IP
 * Service discovery
-* Internal load balancing
+* Basic load balancing
 * Network abstraction for Pods
 
 Services route traffic to Pods using label selectors.
