@@ -3,23 +3,6 @@
 
 # 📘 Chapter 4: What Is a Kubernetes Cluster?
 
----
-
-## 1️⃣ Why This Chapter Is Important
-
-Before understanding Pods, Deployments, or Services, you must understand **where Kubernetes runs**.
-
-Many people think:
-
-* Kubernetes is one server ❌
-* Kubernetes is just software ❌
-
-This chapter fixes that mental model.
-
----
-
-## 2️⃣ Simple Definition (Very Easy)
-
 > **A Kubernetes cluster is a group of machines working together to run applications.**
 
 These machines can be:
@@ -30,7 +13,7 @@ These machines can be:
 
 ---
 
-## 3️⃣ The Two Main Parts of a Cluster
+## 1️⃣ The Two Main Parts of a Cluster
 
 A Kubernetes cluster always has **two logical parts**:
 
@@ -44,7 +27,7 @@ Think of it like:
 
 ---
 
-## 4️⃣ Control Plane (High-Level View)
+## 2️⃣ Control Plane (High-Level View)
 
 The Control Plane:
 
@@ -55,11 +38,9 @@ The Control Plane:
 
 👉 **No applications run here** (in most setups).
 
-We will go deep into this in Chapter 5.
-
 ---
 
-## 5️⃣ Worker Nodes (High-Level View)
+## 3️⃣ Worker Nodes (High-Level View)
 
 Worker nodes:
 
@@ -74,7 +55,7 @@ Each worker node:
 
 ---
 
-## 6️⃣ Mental Model: Company Office 🏢
+## 4️⃣ Mental Model: Company Office 🏢
 
 Imagine a company.
 
@@ -100,7 +81,7 @@ They:
 
 ---
 
-## 7️⃣ How a Request Flows (Very Important)
+## 5️⃣ How a Request Flows (Very Important)
 
 When you run:
 
@@ -120,7 +101,7 @@ You don’t need to control these steps — Kubernetes handles them.
 
 ---
 
-## 8️⃣ How Many Nodes Can a Cluster Have?
+## 6️⃣ How Many Nodes Can a Cluster Have?
 
 A cluster can have:
 
@@ -135,7 +116,7 @@ Examples:
 
 ---
 
-## 9️⃣ Why Clusters Are Powerful
+## 7️⃣ Why Clusters Are Powerful
 
 Because of clusters:
 
@@ -160,7 +141,7 @@ Because of clusters:
 
 ---
 
-## ✅ Key Takeaway from Chapter 4
+## ✅ Key Takeaway
 
 * Kubernetes always runs as a **cluster**
 * Control Plane = decision maker
