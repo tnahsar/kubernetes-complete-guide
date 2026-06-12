@@ -15,8 +15,8 @@ A Pod does not stay permanent forever.
 
 It gets:
 
-* created
 * scheduled
+* created
 * started
 * monitored
 * terminated
