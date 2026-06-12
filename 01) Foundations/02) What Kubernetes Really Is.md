@@ -1,7 +1,7 @@
 
 ---
 
-# 📘 Chapter 2: What Kubernetes Really Is (Mental Model)
+# 📘 Chapter 2: What Kubernetes Really Is  - (Desired state = Current state)
 
 ---
 
@@ -63,25 +63,29 @@ Desired State ≠ Current State
 
 ---
 
-### 4️⃣ Declarative vs Imperative (Very Important)
+### 4️⃣ Kubernetes provides a declarative configuration model (Very Important)
 
-### Imperative (Old Way)
+### Declarative vs Imperative 
 
-You say **HOW** to do things:
+    Imperative (old way)
 
-```bash
-start container
-restart container
-scale container
-```
+    You say **HOW** to do things:
 
-### Declarative (Kubernetes Way)
+    ```bash
+    start container
+    restart container
+    scale container
+    ```
 
-You say **WHAT you want**:
+    Declarative (new way)
 
-```yaml
-replicas: 3
-```
+    You say **WHAT you want**:
+
+    ```yaml
+    replicas: 3
+    ```
+
+👉 **So, you declare the configuration, Kubernetes manages.**
 
 Kubernetes figures out:
 
@@ -89,7 +93,6 @@ Kubernetes figures out:
 * When to restart
 * How to scale
 
-👉 **You declare, Kubernetes manages.**
 
 ---
 
