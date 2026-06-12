@@ -1,11 +1,11 @@
 
 ---
 
-# 📘 Chapter 1: Why Kubernetes Exists (The Problem It Solves)
+# 📘 Chapter 1: Why Kubernetes exists (the problem it solves)
 
 ---
 
-## The World *Before* Kubernetes (The Real Pain)
+## The world *before* Kubernetes (the real pain)
 
 Before Kubernetes, teams typically ran applications like this:
 
@@ -21,14 +21,14 @@ Before Kubernetes, teams typically ran applications like this:
 
 3. **But operations were still mostly manual**, leading to new challenges:
 
-### Operational Problems
+### Operational problems
 
 | Problem                            | What it meant manually                                                                      |
 | ---------------------------------- | ------------------------------------------------------------------------------------------- |
 | **Single-host / Clustering**       | Containers running on one server → single point of failure; no multi-host orchestration     |
 | **Auto-healing**                   | If a container crashed, engineers had to restart it manually                                |
 | **Auto-scaling**                   | During traffic spikes, containers had to be manually added or removed                       |
-| **Rolling updates & deployments**  | Updating applications without downtime required manual effort                               |
+| **Rolling updates & Rollbacks**  | Updating applications without downtime required manual effort                               |
 | **Service discovery & networking** | Containers come and go → IPs change → manual network configuration and communication issues |
 
 
@@ -36,7 +36,7 @@ At a small scale, these operational problems/challenges were manageable, but **a
 
 ---
 
-## 📦 The First Big Problem Solved by Docker: “It Works on My Machine”
+## 📦 The first big problem “It works on my machine” - solved by Docker
 
 You might have heard developers say:
 
@@ -66,18 +66,13 @@ Docker was released in **2013** as a **application packaging tool**.
 
 * In **2014**, Docker introduced **Docker Compose**, which enabled users to **define and run multi-container applications on a single host**.
 
-* Also in **2014**, Docker released **Docker Swarm**, a **separate orchestration tool** designed to **run and manage containers across multiple hosts**, providing basic clustering and container scheduling. And later integrated **Swarm Mode** directly into **Docker Engine** in **2016**.
+* Also in **2014**, Docker released **Docker Swarm**, a **separate orchestration tool** designed to **run and manage containers across multiple hosts**, providing basic clustering, basic auto-healing, and replica-based scaling and container scheduling. And later integrated **Swarm Mode** directly into **Docker Engine** in **2016**.
+
+* However, **Docker Swarm** alone **was not sufficient for large-scale operations**. This is where **Kubernetes** comes in — providing a robust platform to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, and service discovery reliably.
 
 ---
 
-✅ **The “It Works on My Machine” problem was largely solved by Docker.**
-
-* Also, to address operational challenges at a basic level, Docker introduced **Docker Swarm**, which provided features like multi-host container management, basic auto-healing, and replica-based scaling.
-* However, Docker Swarm alone **was not sufficient for large-scale operations**. This is where **Kubernetes** comes in — providing a robust platform to **automate and manage containerized applications at scale**, solving operational problems like clustering, auto-healing, auto-scaling, rolling updates, and service discovery reliably.
-
----
-
-### Evolution of Kubernetes
+### Evolution of Kubernetes:
 
 * Kubernetes was originally released in **2014** by Google as an **open-source container orchestration platform**, inspired by Google’s internal systems (Borg and Omega) for managing containers at scale.
 * In **2015**, Kubernetes was donated to the **Cloud Native Computing Foundation (CNCF)**, which helped establish it as a **vendor-neutral, community-driven project** and accelerated its adoption across the industry.
@@ -85,8 +80,8 @@ Docker was released in **2013** as a **application packaging tool**.
 Over time, Kubernetes evolved to support:
 
 * **Advanced scheduling and clustering**
-* **Self-healing and auto-scaling**
-* **Rolling updates and declarative deployments**
+* **Auto-healing and auto-scaling**
+* **Declarative deployments - Rolling updates and Roobacks**
 * **Built-in service discovery and networking**
 * **Pluggable storage and networking interfaces (CSI, CNI)**
 
@@ -101,25 +96,22 @@ As container adoption grew, Kubernetes became the **de facto standard for contai
 What is Clustering?
 
 > **Clustering** means running and managing containers across **multiple machines (hosts)** as a single system.
-* Prevents **single points of failure**: if one host goes down, containers can run on other nodes
-* Enables **workload distribution** across the cluster
-* Provides the foundation for advanced orchestration features
 
-### Why Clustering Is Important
+### Why clustering is important
+
+* Clustering prevents **single points of failure**: if one host goes down, containers can run on other nodes
+* It enables **workload distribution** across the cluster
+* Also, it provides the foundation for advanced orchestration features
 
 Imagine:
+* You have **10 containers**, all running on **one server** and the server crashes
 
-* You have **10 containers**
-* All running on **one server**
-* The server crashes
+### Without clustering:
 
-### Without Clustering:
+* All **10 containers go down**. The application becomes **unavailable** and the users will be affected
 
-* All **10 containers go down**
-* The application becomes **unavailable**
-* Users are affected
-
-Clustering removes the **single point of failure**.
+### With clustering:
+* Clustering removes the **single point of failure**. So, if server/node crashes the container can run on another server/node.
 
 ### Clustering (Docker Swarm vs Kubernetes)
 
@@ -140,7 +132,9 @@ Clustering removes the **single point of failure**.
 
 **Auto-healing** ensures that if a container fails, it is **automatically restarted** without human intervention.
 
-* Prevents downtime caused by crashed containers
+### Why auto-healing important
+
+* Auto-healing prevents downtime caused by crashed containers
 * Critical at scale — impossible to handle manually for hundreds of containers
 
 Consider this scenario:
@@ -175,7 +169,9 @@ At scale, this approach is **not sustainable**.
 
 **Auto-scaling** allows the system to **adjust the number of running containers** based on traffic or resource usage.
 
-* Prevents overload during traffic spikes
+### Why auto-scaling important
+
+* Auto-scaling prevents overload during traffic spikes
 * Reduces costs during low traffic by scaling down
 
 Running **one container** is easy. Running **hundreds or thousands** is not.
@@ -203,13 +199,16 @@ Imagine:
 
 ---
 
-### 4️⃣ Rolling Updates & Deployments
+### 4️⃣ Rolling updates & Rollbacks
 
-Rolling updates and deployments allow applications to be updated **without downtime** by gradually replacing old container versions with new ones.
+Rolling updates and rollbacks allow applications to be updated **without downtime** by gradually replacing old container versions with new ones.
+
+### Why rolling updates & rollbacks important
 
 * Prevents application downtime during updates
 * Ensures consistent application versions across replicas
-* Allows safer upgrades and quick recovery from failures
+* Allows safe and more reliable production release upgrades
+* Allow quick recovery if a deployment fails
 
 | Feature               | Docker Swarm         | Kubernetes                                   |
 | --------------------- | -------------------- | -------------------------------------------- |
@@ -225,12 +224,11 @@ Rolling updates and deployments allow applications to be updated **without downt
 
 ### 5️⃣ Service Discovery & Networking
 
-Service discovery and networking ensure that containers can **reliably find and communicate** with each other in dynamic environments.
+Service discovery and networking ensure that pods can **reliably discover and communicate** with each other in dynamic containerized environments.
 
-* Handles frequently changing container IP addresses
+* Handles pod IP addresses
 * Enables reliable inter-service communication
-* Eliminates the need for manual network configuration
-
+* Eliminates the need for manual service endpoint management
 
 | Feature                 | Docker Swarm               | Kubernetes                               |
 | ----------------------- | -------------------------- | ---------------------------------------- |
